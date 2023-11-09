@@ -1,0 +1,12 @@
+{
+    "mapping": {
+        "paths": {
+            "map_img_1": "E:/3i_phasor_accuracy_zoology/top_reference_XY0_Z0_T0_C0.tif",
+            "map_img_2": "E:/3i_phasor_accuracy_zoology/sub_reference_XY0_Z0_T0_C0.tif"
+        },
+        "settings": {
+            "mapped": false,
+            "blob_count": 4
+        }
+    }
+}
