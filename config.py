@@ -1,5 +1,5 @@
 # Default colormap for visualizations
-CMAP = 'viridis'
+CMAP = 'gray'
 
 # Colorblind-friendly color palette
 COLOR_PALETTE = [
@@ -13,8 +13,8 @@ COLOR_PALETTE = [
     '#FFFFFF',  # white
 ]
 
-# Minimum operator size
-MIN_OPERATOR_SIZE = 3
+# Median kernel size
+MEDIAN_KERNEL_SIZE = 3
 
-# Maximum operator size
-MAX_OPERATOR_SIZE = 8
+# Closing kernel size
+OPENING_KERNEL_SIZE = 3
