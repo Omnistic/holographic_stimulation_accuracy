@@ -12,20 +12,44 @@ def visualize_image(image, title='Image Viewer'):
     plt.show()
 
 def plot_accuracy(target_positions, actual_positions, voxel_size=[1, 1, 1]):
-    labels = ['S1', 'S2', 'S3', 'S4', 'S5', 'S6', 'S7']
-    plt.subplot(1, 4, 1)
-    plt.title('X Accuracy')
-    plt.scatter(labels, (target_positions[:, 1]-actual_positions[:, 1])*voxel_size[1], c=COLOR_PALETTE[:-1])
-    plt.grid()
-    plt.subplot(1, 4, 2)
-    plt.title('Y Accuracy')
-    plt.scatter(labels, (target_positions[:, 2]-actual_positions[:, 2])*voxel_size[2], c=COLOR_PALETTE[:-1])
-    plt.grid()
-    plt.subplot(1, 4, 3)
-    plt.title('Z Accuracy')
-    plt.scatter(labels, ((target_positions[:, 0]-actual_positions[:, 0])*voxel_size[0]), c=COLOR_PALETTE[:-1])
-    plt.grid()
+    """
+    Plot the accuracy of target versus actual positions in 3D coordinates.
+
+    Parameters:
+    target_positions (ndarray): Array of target positions.
+    actual_positions (ndarray): Array of actual positions.
+    voxel_size (list): Voxel size in each dimension.
+    """
+    # Generate labels for each point
+    labels = [f'S{i + 1}' for i in range(target_positions.shape[0])]
+
+    # Define accuracy in each dimension
+    accuracies = [
+        (target_positions[:, 1] - actual_positions[:, 1]) * voxel_size[1],  # X Accuracy
+        (target_positions[:, 2] - actual_positions[:, 2]) * voxel_size[2],  # Y Accuracy
+        (target_positions[:, 0] - actual_positions[:, 0]) * voxel_size[0]   # Z Accuracy
+    ]
+
+    # Plotting accuracies in each dimension
+    for i, accuracy in enumerate(accuracies, start=1):
+        plot_dimension_accuracy(i, labels, accuracy, f'{["X", "Y", "Z"][i-1]} Accuracy')
+
     plt.show()
+
+def plot_dimension_accuracy(subplot_index, labels, accuracy, title):
+    """
+    Helper function to plot accuracy in one dimension.
+
+    Parameters:
+    subplot_index (int): Index of the subplot.
+    labels (list): Labels for each data point.
+    accuracy (ndarray): Accuracy values for the dimension.
+    title (str): Title of the subplot.
+    """
+    plt.subplot(1, 4, subplot_index)
+    plt.title(title)
+    plt.scatter(labels, accuracy, c=COLOR_PALETTE[:-1])
+    plt.grid()
 
 def display_image_napari(image, points_count, points_size, title='Napari Image Viewer', colormap=CMAP, scale=[1, 1, 1], custom_points=None, auto_points=None):
     """
@@ -51,6 +75,7 @@ def display_image_napari(image, points_count, points_size, title='Napari Image V
         viewer.dims.ndisplay = 3
     elif image.ndim == 2:
         viewer.add_image(image, colormap=colormap)
+        scale = [1, 1]
 
     # Assign colors from the palette to each point's edge
     point_colors = [COLOR_PALETTE[i % len(COLOR_PALETTE)] for i in range(points_count)]
@@ -87,7 +112,7 @@ def display_image_napari(image, points_count, points_size, title='Napari Image V
             points_layer = viewer.add_points(auto_points*scale, size=points_size/10, edge_width=0.1,
                                             face_color=point_colors, edge_color='black',
                                             symbol='disc',
-                                            name='Transformed Points')
+                                            name='Detected Points')
             
             points_layer.editable = False
     else:
