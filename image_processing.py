@@ -112,12 +112,19 @@ def locate_blobs(image, number_of_blobs, source=1):
     tuple: Centroids of identified blobs and average major axis length.
     """
     threshold = threshold_otsu(image)
+    #if image.ndim == 3:
+    #    threshold += 50
     binary_image = image > threshold
 
     if source == 0:
         binary_image = dilation(binary_image, binary_kernel(DILATION_KERNEL_SIZE, dim=image.ndim))
     else:
-        binary_image = opening(binary_image, binary_kernel(OPENING_KERNEL_SIZE, dim=image.ndim))
+        #binary_image = opening(binary_image, binary_kernel(OPENING_KERNEL_SIZE, dim=image.ndim))
+        pass
+    
+    import napari
+    napari.view_image(binary_image)
+    napari.run()
 
     labels = label(binary_image)
     regions = get_largest_regions_by_area(labels, number_of_blobs)

@@ -21,7 +21,7 @@ def plot_accuracy(target_positions, actual_positions, voxel_size=[1, 1, 1]):
     voxel_size (list): Voxel size in each dimension.
     """
     # Generate labels for each point
-    labels = [f'S{i + 1}' for i in range(target_positions.shape[0])]
+    labels = [f'S{ii + 1}' for ii in range(target_positions.shape[0])]
 
     # Define accuracy in each dimension
     accuracies = [
@@ -46,9 +46,10 @@ def plot_dimension_accuracy(subplot_index, labels, accuracy, title):
     accuracy (ndarray): Accuracy values for the dimension.
     title (str): Title of the subplot.
     """
+    c = [COLOR_PALETTE[i % len(COLOR_PALETTE)] for i in range(len(labels))]
     plt.subplot(1, 4, subplot_index)
     plt.title(title)
-    plt.scatter(labels, accuracy, c=COLOR_PALETTE[:-1])
+    plt.scatter(labels, accuracy, c=c)
     plt.grid()
 
 def display_image_napari(image, points_count, points_size, title='Napari Image Viewer', colormap=CMAP, scale=[1, 1, 1], custom_points=None, auto_points=None):

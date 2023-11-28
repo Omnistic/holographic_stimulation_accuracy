@@ -119,7 +119,7 @@ def analyze_stack(config_file_path):
             print("Analysis data not available. Analyzing now...")
         else:
             print("Analysis data available. Skipping analysis.")
-            return stack, np.asarray(config['analysis']['results']['ref_blob_map']), np.asarray(config['analysis']['results']['stack_blobs']), 10, config['analysis']['settings']['voxel_size_um']
+            return stack, np.asarray(config['analysis']['results']['ref_blob_map']), np.asarray(config['analysis']['results']['stack_blobs']), config['analysis']['results']['blob_size'], config['analysis']['settings']['voxel_size_um']
     except Exception as e:
         print(f"An error occurred: {e}")
         return
@@ -141,7 +141,7 @@ def analyze_stack(config_file_path):
 
     # Automatically locate the blobs in the stack
     stack_blobs, _ = locate_blobs(stack, stack_blob_count)
-    
+  
     # Order located blobs
     stack_blobs = find_closest_regions(ref_blob_map, stack_blobs)
 
@@ -149,6 +149,7 @@ def analyze_stack(config_file_path):
         config['analysis']['settings']['analyzed'] = True
         config['analysis']['results']['ref_blob_map'] = ref_blob_map.tolist()
         config['analysis']['results']['stack_blobs'] = stack_blobs.tolist()
+        config['analysis']['results']['blob_size'] = blob_size
         write_config_to_json(config_file_path, config)
     except Exception as e:
         print(f"An error occurred: {e}")
